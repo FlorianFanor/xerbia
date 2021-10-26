@@ -1,0 +1,31 @@
+@import "../common/CommonStyle.scss";
+
+.mainPage {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 20px;
+  flex-direction: column;
+}
+
+.search {
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.filterBtn {
+  margin: 0 20px;
+  border-radius: 25px;
+}
+
+.cardContainer {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  padding: 20px;
+  background-color: $tertiarycolor;
+}
