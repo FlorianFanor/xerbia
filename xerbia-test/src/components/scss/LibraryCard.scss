@@ -1,0 +1,17 @@
+@import "../../common/CommonStyle.scss";
+
+.cardLibrary {
+  &__container {
+    margin: 10px;
+  }
+  &__btn {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+  }
+  &__text {
+    font-size: 14 !important;
+    color: $textcolor;
+  }
+}
