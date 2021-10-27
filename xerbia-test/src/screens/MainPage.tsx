@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
-import "./MainPage.scss";
-import { Button, IconButton, TextField } from "@mui/material";
-import FilterListIcon from "@mui/icons-material/FilterList";
+import "./scss/MainPage.scss";
+import { TextField } from "@mui/material";
 import LibraryCard from "../components/LibraryCard";
 
 type Book = {
@@ -13,9 +11,9 @@ type Book = {
   synopsis: string;
 };
 
-const MainPage = () => {
+const MainPage = (props: any) => {
   const [books, setBooks] = useState([]);
-  const [searchText, setSearchText] = useState();
+  const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
     getBooks();
@@ -29,69 +27,40 @@ const MainPage = () => {
       });
   };
 
-  // const filterSearch = (inputId: string) => {
-  //   // setSearchText(inputText);
+  const onchangeText = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(e.target.value);
+  };
 
-  //   const newData = books.filter((item: Book) => {
-  //     // myArray.filter(x => x.id === '45');
-  //     if (inputId === "") {
-  //       return getBooks();
-  //     }
-
-  //     item.cover === inputId;
-
-  //     // return itemData.indexOf(textData) > -1;
-  //   });
-
-  //   setBooks(newData);
-  // }; // End FilterSearch
-
-  // const FilterSearch = (inputText) => {
-  //   setSearchText(inputText);
-
-  //   const newData = formationDataFilter.filter((item) => {
-  //     const itemData = `${item.titre.toUpperCase()} ${item.description.toUpperCase()}`;
-
-  //     const textData = inputText.toUpperCase();
-
-  //     setSortType('');
-
-  //     if (inputText === '') {
-  //       return getFormation();
-  //     }
-
-  //     return itemData.indexOf(textData) > -1;
-  //   });
-
-  //   setFormationData(newData);
-  // }; // End FilterSearch
+  const filterSearch = books.filter((book: Book) => {
+    return book.title.toLowerCase().indexOf(searchText.toLowerCase()) !== -1;
+  });
 
   return (
     <div className="mainPage">
-      <div className="mainPage search">
+      <div className="mainPage__search">
         <TextField
+          inputProps={{ "data-testid": "recherche" }}
           error={false}
           id="outlined-error"
           label="Recherche"
-          defaultValue="Henri Potier à l'école des sorciers. . ."
+          defaultValue=""
+          onChange={onchangeText}
           fullWidth
         />
-        <div className="filterBtn">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </div>
       </div>
 
-      <div className="cardContainer">
-        {books.map((book: Book) => (
-          <LibraryCard
-            id={book.isbn}
-            title={book.title}
-            description={book.synopsis}
-            cover={book.cover}
-            price={book.price}
-          />
+      {/* <div data-testid="cart"></div>
+      <div data-testid="cart"></div>
+      <div data-testid="cart"></div>
+      <div data-testid="cart"></div>
+      <div data-testid="cart"></div>
+      <div data-testid="cart"></div> */}
+
+      <div className="mainPage__cardContainer">
+        {filterSearch.map((book: Book, index: number) => (
+          <div data-testid="cart" key={index}>
+            <LibraryCard book={book} key={index.toString()} />
+          </div>
         ))}
       </div>
     </div>

@@ -1,8 +1,15 @@
 /* Define standard variables and values for website */
 $bgcolor: #f9f7f7;
+$bgcolordark: #dedbdb;
 $primarycolor: #3f72af;
 $secondarycolor: #112d4e;
 $tertiarycolor: #dbe2ef;
+$white: white;
 
 $textcolor: #112d4e;
 $fontsize: 16px;
+
+.center {
+  align-self: center;
+  margin: 0 auto;
+}

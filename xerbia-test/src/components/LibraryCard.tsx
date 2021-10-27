@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -10,54 +10,79 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import "./scss/LibraryCard.scss";
+import { addToCart } from "./actions/CartActions";
+import { connect } from "react-redux";
+import PrimaryButton from "./button/PrimaryButton";
 
-type AppProps = {
-  id: string;
-  title: string;
-  description: string;
-  cover: string;
-  price: number;
-};
-
-const LibraryCard = ({ id, title, description, cover, price }: AppProps) => {
+const LibraryCard = (
+  props: any
+  // { id, title, description, cover, price }: AppProps,
+) => {
   const [expanded, setExpanded] = useState(false);
+  const [displayedCart, setDisplayedCart] = useState(true);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
+  const addToShoppingCart = () => {
+    props.dispatch(addToCart(props.book));
+  };
+
+  const checkIfExistinCart = () => {
+    if (
+      props.Cart.findIndex((item: any) => item.id === props.book.isbn) !== -1
+    ) {
+      setDisplayedCart(false);
+    }
+  };
+
+  useEffect(() => {
+    checkIfExistinCart();
+  }, [props.Cart]);
+
   return (
-    <div className="cardLibraryContainer" key={id}>
-      <Card sx={{ maxWidth: 345 }}>
+    <div className="cardLibrary__container" data-testid={"cart"}>
+      <Card sx={{ maxWidth: 375 }}>
         <CardHeader
-          action={
-            <IconButton aria-label="settings">
-              {/* <MoreVertIcon /> */}
-            </IconButton>
-          }
-          title={title}
-          subheader={`${price} €`}
+          action={<IconButton aria-label="settings"></IconButton>}
+          title={props.book.title}
+          subheader={`${props.book.price} €`}
         />
-        <CardMedia component="img" height="500" image={cover} alt={cover} />
+        <CardMedia
+          component="img"
+          height="500"
+          image={props.book.cover}
+          alt={props.book.cover}
+        />
         <CardContent></CardContent>
         <CardActions disableSpacing>
-          <div className="cardLibraryBtn">
-            <IconButton aria-label="add to favorites">
-              <ShoppingCartIcon />
-            </IconButton>
-
-            <IconButton aria-label="share" onClick={handleExpandClick}>
-              <Button color="secondary">Voir plus</Button>
-            </IconButton>
+          <div className="cardLibrary__btn">
+            <PrimaryButton onClick={handleExpandClick} label={"Voir plus"} />
+            {displayedCart ? (
+              <IconButton aria-label="add to cart" onClick={addToShoppingCart}>
+                <ShoppingCartIcon />
+              </IconButton>
+            ) : (
+              <div className="cardLibrary__text">Ajouté au panier</div>
+            )}
           </div>
         </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            <Typography variant="body2" color="text.secondary">
-              {description}
-            </Typography>
+            {props.book.synopsis.map((description: string, index: number) => {
+              return (
+                <Typography
+                  key={index.toString()}
+                  variant="body2"
+                  color="text.secondary"
+                >
+                  {description}
+                </Typography>
+              );
+            })}
           </CardContent>
         </Collapse>
       </Card>
@@ -65,4 +90,10 @@ const LibraryCard = ({ id, title, description, cover, price }: AppProps) => {
   );
 };
 
-export default LibraryCard;
+const mapStateToProps = (state: any) => {
+  return {
+    Cart: state.CartReducer,
+  };
+};
+
+export default connect(mapStateToProps)(LibraryCard);

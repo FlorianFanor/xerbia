@@ -1,0 +1,15 @@
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  &__box {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+}
